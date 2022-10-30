@@ -1,5 +1,7 @@
 .vs/
 bin/
 obj/
+Properties/
 Lab8/Subtitles/bin
 Lab8/Subtitles/obj
+Lab8/Subtitles/Properties
