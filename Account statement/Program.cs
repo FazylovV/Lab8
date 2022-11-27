@@ -27,16 +27,18 @@ namespace AccountStatement
             string startTime = sortedArray[0][0];
             string endTime = sortedArray[sortedArray.Length - 1][0];
             long timeLong;
-            string? timeStr;
+            string timeStr;
 
-            Console.WriteLine("Дата и Время вводится в формате \"YYYY-MM-DD HH:MM\" (Нажав ENTER без ввода символов, программа выведет итоговый остаток средств)");
+            Console.WriteLine("Дата и Время вводится в формате \"YYYY-MM-DD HH:MM\"");
+            Console.WriteLine("Нажав ENTER без ввода символов, программа выведет итоговый остаток средств");
+            Console.WriteLine();
             Console.WriteLine($"В данном файле дата и время вводятся от {startTime} до {endTime}");
 
             while (true)
             {
                 timeStr = Console.ReadLine();
 
-                if (timeStr == null)
+                if (timeStr == "")
                 {
                     timeLong = long.Parse(GetDate(endTime));
                     break;
@@ -44,20 +46,20 @@ namespace AccountStatement
                 else
                 {
                     bool isLong = long.TryParse(GetDate(timeStr), out timeLong);
-                    if (isLong && timeLong <= long.Parse(GetDate(endTime)) && timeLong >= long.Parse(GetDate(startTime))) break;
+                    if (isLong && timeLong <= long.Parse(GetDate(endTime)) && timeLong >= long.Parse(GetDate(startTime)) && timeStr.Length == 16) break;
                 }
 
                 Console.WriteLine("Попробуйте еще раз");
             }
 
             int accountBalance = CalculateAccountBalance(sortedArray, timeLong, startBalance);
-            Console.WriteLine($"На момент {timeStr} на счете находится: {accountBalance}");
+            if(timeStr != "") Console.WriteLine($"На момент {timeStr} на счете находится: {accountBalance}");
+            else Console.WriteLine($"Итоговый остаток средств: {accountBalance}");
         }
         
         public static string[] GetArrayWithoutStartBalance(string[] fileText)
         {
             string[] arrayOperations = new string[fileText.Length-1];
-            var dates = new List<long>(); 
 
             for (int i = 0; i < fileText.Length-1; i++) 
                 arrayOperations[i] = fileText[i+1];
@@ -101,7 +103,6 @@ namespace AccountStatement
         public static int[] SortDatesAndSavePreviousIndex(long[] dates)
         {
             int[] previousIndex = new int[dates.Length];
-            int indexOfLastElement = dates.Length - 1;
 
             for (int i = 0; i < dates.Length; i++)
             {
